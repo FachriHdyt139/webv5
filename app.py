@@ -17,12 +17,13 @@ def index():
 
         filename = str(uuid.uuid4())
 
-        ydl_opts = {
-            'outtmpl': f'{DOWNLOAD_DIR}/{filename}.%(ext)s',
-            'format': 'mp4',
-            'quiet': True,
-            'nocheckcertificate': True,
-        }
+ydl_opts = {
+    'format': 'mp4',
+    'outtmpl': 'downloads/%(title).50s.%(ext)s',
+    'cookiefile': 'cookies.txt',
+    'quiet': True,
+    'noplaylist': True
+}
 
         try:
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
@@ -39,3 +40,4 @@ def index():
 
 if __name__ == "__main__":
     app.run()
+
