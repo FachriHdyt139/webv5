@@ -5,7 +5,6 @@ import uuid
 
 app = Flask(__name__)
 DOWNLOAD_DIR = "downloads"
-
 os.makedirs(DOWNLOAD_DIR, exist_ok=True)
 
 @app.route("/", methods=["GET", "POST"])
@@ -20,9 +19,9 @@ def index():
 
         ydl_opts = {
             'outtmpl': f'{DOWNLOAD_DIR}/{filename}.%(ext)s',
-            'format': 'mp4/bestaudio/best',
-            'merge_output_format': 'mp4',
+            'format': 'mp4',
             'quiet': True,
+            'nocheckcertificate': True,
         }
 
         try:
