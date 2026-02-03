@@ -1,113 +1,113 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>TikTok Downloader</title>
+<meta charset="UTF-8">
+<title>TikTok Downloader</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- Bootstrap 5 -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
-  <style>
-    body {
-      background: linear-gradient(135deg, #0d6efd, #6610f2);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-    }
-    .card {
-      border-radius: 18px;
-    }
-    .btn-download {
-      font-weight: 600;
-      letter-spacing: .5px;
-      transition: 0.2s;
-    }
-    .btn-download:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(0,0,0,.15);
-    }
-    footer {
-      font-size: 13px;
-      opacity: .7;
-    }
-  </style>
+.card {
+    background: white;
+    padding: 25px;
+    width: 100%;
+    max-width: 420px;
+    border-radius: 12px;
+    text-align: center;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+#loader {
+    display: none;
+    margin-top: 15px;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #ddd;
+    border-top: 4px solid #2563eb;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: auto;
+}
+
+@keyframes spin {
+    100% { transform: rotate(360deg); }
+}
+
+.progress {
+    width: 100%;
+    background: #eee;
+    border-radius: 6px;
+    margin-top: 10px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 8px;
+    width: 0%;
+    background: #22c55e;
+}
+</style>
 </head>
 
 <body>
-<div class="container px-3">
-  <div class="row justify-content-center">
-    <div class="col-lg-5 col-md-7">
 
-      <div class="card shadow-lg p-4">
-        <h3 class="text-center mb-2">🎵 TikTok Downloader</h3>
-        <p class="text-center text-muted mb-4">
-          Download video TikTok HD tanpa watermark, gratis & cepat
-        </p>
+<div class="card">
+    <h2>TikTok Downloader</h2>
 
-        <form method="POST" onsubmit="startLoading()">
-          <div class="mb-3">
-            <input type="text"
-                   name="url"
-                   class="form-control form-control-lg"
-                   placeholder="Paste URL TikTok di sini"
-                   required>
-          </div>
+    <form method="POST">
+        <input type="text" name="url" placeholder="Paste URL TikTok" required>
+        <button type="submit">Download</button>
+    </form>
 
-          <!-- BUTTON -->
-          <button id="downloadBtn"
-                  type="submit"
-                  class="btn btn-primary btn-lg w-100 btn-download">
-            ⬇ Download Sekarang
-          </button>
-
-          <!-- LOADER -->
-          <div id="loader" class="text-center mt-4 d-none">
-            <div class="spinner-border text-primary mb-3" role="status"></div>
-            <p class="mb-2">Memproses video…</p>
-
-            <div class="progress">
-              <div id="progressBar"
-                   class="progress-bar progress-bar-striped progress-bar-animated"
-                   style="width: 0%"></div>
-            </div>
-          </div>
-        </form>
-
-        <hr class="my-4">
-
-        <ul class="text-muted small mb-0">
-          <li>✔ Gratis & tanpa login</li>
-          <li>✔ Cocok di HP & desktop</li>
-          <li>✔ Cepat dan tanpa iklan</li>
-        </ul>
-      </div>
-
-      <footer class="text-center text-white mt-4">
-        © 2026 TikTok Downloader • Built with FACHRI HIDAYAT
-      </footer>
-
+    <div id="loader">
+        <div class="spinner"></div>
+        <div class="progress">
+            <div class="progress-bar" id="bar"></div>
+        </div>
+        <p>Memproses...</p>
     </div>
-  </div>
 </div>
 
 <script>
-function startLoading() {
-  document.getElementById("downloadBtn").classList.add("d-none");
-  document.getElementById("loader").classList.remove("d-none");
+const form = document.querySelector("form");
+const loader = document.getElementById("loader");
+const bar = document.getElementById("bar");
 
-  let progress = 0;
-  const bar = document.getElementById("progressBar");
-
-  const interval = setInterval(() => {
-    if (progress >= 95) {
-      clearInterval(interval);
-    } else {
-      progress += Math.random() * 10;
-      bar.style.width = progress + "%";
-    }
-  }, 500);
-}
+form.addEventListener("submit", () => {
+    loader.style.display = "block";
+    let progress = 0;
+    const interval = setInterval(() => {
+        progress += Math.random() * 15;
+        if (progress >= 95) progress = 95;
+        bar.style.width = progress + "%";
+    }, 400);
+});
 </script>
 
 </body>
