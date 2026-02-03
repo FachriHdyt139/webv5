@@ -16,11 +16,16 @@
       align-items: center;
     }
     .card {
-      border-radius: 16px;
+      border-radius: 18px;
     }
     .btn-download {
       font-weight: 600;
       letter-spacing: .5px;
+      transition: 0.2s;
+    }
+    .btn-download:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0,0,0,.15);
     }
     footer {
       font-size: 13px;
@@ -37,29 +42,44 @@
       <div class="card shadow-lg p-4">
         <h3 class="text-center mb-2">🎵 TikTok Downloader</h3>
         <p class="text-center text-muted mb-4">
-          Download video TikTok tanpa watermark
+          Download video TikTok HD tanpa watermark, gratis & cepat
         </p>
 
-        <form method="POST">
+        <form method="POST" onsubmit="startLoading()">
           <div class="mb-3">
-            <input type="text" 
-                   name="url" 
+            <input type="text"
+                   name="url"
                    class="form-control form-control-lg"
                    placeholder="Paste URL TikTok di sini"
                    required>
           </div>
 
-          <button class="btn btn-primary btn-lg w-100 btn-download">
+          <!-- BUTTON -->
+          <button id="downloadBtn"
+                  type="submit"
+                  class="btn btn-primary btn-lg w-100 btn-download">
             ⬇ Download Sekarang
           </button>
+
+          <!-- LOADER -->
+          <div id="loader" class="text-center mt-4 d-none">
+            <div class="spinner-border text-primary mb-3" role="status"></div>
+            <p class="mb-2">Memproses video…</p>
+
+            <div class="progress">
+              <div id="progressBar"
+                   class="progress-bar progress-bar-striped progress-bar-animated"
+                   style="width: 0%"></div>
+            </div>
+          </div>
         </form>
 
         <hr class="my-4">
 
-        <ul class="text-muted small">
+        <ul class="text-muted small mb-0">
           <li>✔ Gratis & tanpa login</li>
           <li>✔ Cocok di HP & desktop</li>
-          <li>✔ Cepat Dan Tanpa Iklan</li>
+          <li>✔ Cepat dan tanpa iklan</li>
         </ul>
       </div>
 
@@ -70,6 +90,25 @@
     </div>
   </div>
 </div>
+
+<script>
+function startLoading() {
+  document.getElementById("downloadBtn").classList.add("d-none");
+  document.getElementById("loader").classList.remove("d-none");
+
+  let progress = 0;
+  const bar = document.getElementById("progressBar");
+
+  const interval = setInterval(() => {
+    if (progress >= 95) {
+      clearInterval(interval);
+    } else {
+      progress += Math.random() * 10;
+      bar.style.width = progress + "%";
+    }
+  }, 500);
+}
+</script>
+
 </body>
 </html>
-
