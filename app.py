@@ -1,43 +1,128 @@
-from flask import Flask, render_template, request, send_file
-import yt_dlp
-import os
-import uuid
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TikTok Downloader</title>
 
-app = Flask(__name__)
-DOWNLOAD_DIR = "downloads"
-os.makedirs(DOWNLOAD_DIR, exist_ok=True)
-
-@app.route("/", methods=["GET", "POST"])
-def index():
-    if request.method == "POST":
-        url = request.form.get("url")
-
-        if not url:
-            return "URL kosong!"
-
-        filename = str(uuid.uuid4())
-
-ydl_opts = {
-    'format': 'mp4',
-    'outtmpl': 'downloads/%(title).50s.%(ext)s',
-    'cookiefile': 'cookies.txt',
-    'quiet': True,
-    'noplaylist': True
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #333;
 }
 
-        try:
-            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-                info = ydl.extract_info(url, download=True)
-                ext = info.get("ext", "mp4")
+.card {
+    background: white;
+    padding: 25px;
+    width: 100%;
+    max-width: 420px;
+    border-radius: 14px;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0,0,0,.2);
+}
 
-            filepath = f"{DOWNLOAD_DIR}/{filename}.{ext}"
-            return send_file(filepath, as_attachment=True)
+input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    margin-bottom: 15px;
+}
 
-        except Exception as e:
-            return f"Error: {e}"
+button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: #2563eb;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
 
-    return render_template("index.html")
+button:disabled {
+    background: #999;
+}
 
-if __name__ == "__main__":
-    app.run()
+#loader {
+    display: none;
+    margin-top: 20px;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #ddd;
+    border-top: 4px solid #2563eb;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: auto;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.progress {
+    height: 8px;
+    background: #eee;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-top: 10px;
+}
+
+.bar {
+    width: 0%;
+    height: 100%;
+    background: #2563eb;
+    transition: width 0.4s;
+}
+</style>
+</head>
+
+<body>
+<div class="card">
+    <h2>🎵 TikTok Downloader</h2>
+
+    <form id="downloadForm" method="POST">
+        <input type="text" name="url" placeholder="Paste URL TikTok" required>
+        <button type="submit">Download</button>
+    </form>
+
+    <div id="loader">
+        <div class="spinner"></div>
+        <div class="progress">
+            <div class="bar" id="bar"></div>
+        </div>
+        <p>Sedang memproses...</p>
+    </div>
+</div>
+
+<script>
+const form = document.getElementById("downloadForm");
+const loader = document.getElementById("loader");
+const bar = document.getElementById("bar");
+const btn = form.querySelector("button");
+
+form.addEventListener("submit", () => {
+    loader.style.display = "block";
+    btn.disabled = true;
+
+    let progress = 0;
+    const interval = setInterval(() => {
+        if (progress < 90) {
+            progress += 10;
+            bar.style.width = progress + "%";
+        }
+    }, 500);
+});
+</script>
+
+</body>
+</html>
 
